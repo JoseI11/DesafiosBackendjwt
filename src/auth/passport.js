@@ -8,7 +8,7 @@ import config from "../config.js";
 import {cartModel}  from "../dao/models/cart.model.js";
 import jwt from "passport-jwt"
 
-const { clientID, clientSecret, callbackUrl,jwtSecret } = config
+const { clientID, clientSecret, callbackUrl,JWT_SECRET } = config
 const LocalStrategy = local.Strategy
 const JWTStrategy=jwt.Strategy
 const ExtractJwt=jwt.ExtractJwt
@@ -21,9 +21,9 @@ const cookieExtractor=(req)=>{
     }
     return token
 }
-console.log(jwtSecret)
+console.log(JWT_SECRET)
 const jwtOptions={
-    secretOrKey:jwtSecret,
+    secretOrKey:JWT_SECRET,
     jwtFromRequest:ExtractJwt.fromExtractors([cookieExtractor])
 }
 const initializePassport = () => {
@@ -76,6 +76,7 @@ const initializePassport = () => {
     // }));
     passport.use("jwt",new JWTStrategy(jwtOptions, async (jwt_payload,done)=>{
         try {
+            console.log(jwt_payload)
             return done(null,jwt_payload)
         } catch (error) {
            return done(error)

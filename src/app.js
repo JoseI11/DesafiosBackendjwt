@@ -25,11 +25,10 @@ productServer.use(express.urlencoded({ extended: true }));
 productServer.use(express.static(`${__dirname}/public`));
 productServer.use(morgan("dev"))
 
-productServer.use(cookieParser);
+productServer.use(cookieParser());
+
+
 initializePassport()
-productServer.use(passport.initialize())
-
-
 //View engine
 productServer.engine("handlebars", handlebars.engine());
 productServer.set("views", `${__dirname}/views`);

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import userModel from "../dao/models/user.model.js";
+
 import { createHash, isValidPassword } from "../utils.js"
 import UserManager from "../dao/dbManagers/userdbManager.js";
 import passport from "passport";
@@ -7,13 +7,18 @@ import config from "../config.js";
 import jwt from "jsonwebtoken";
 const userManager=new UserManager()
 const router = Router()
-router.post("/register", passport.authenticate("register", { failureRedirect: "/api/sessions/failRegister" }), async (req, res) => {
+router.post("/register",  passport.authenticate("register", {
+  session: false,
+  failureRedirect: "/api/sessions/failRegister",
+}), async (req, res) => {
   return res.send({ status: "Success", message: "User registered" })
 
 })
 router.get("/failRegister", (req, res) => {
-  return res.send({ status: "status", error: "User already exists" })
-})
+  console.log("Failed Register");
+  return res.send({ status: "error", error: "authentication error" });
+});
+
 router.post("/login",async (req, res) => {
   const {email,password}=req.body
   const user = await userManager.getUser({email})
@@ -23,20 +28,21 @@ router.post("/login",async (req, res) => {
   if(isValidPassword(user,password)){
   return res.status(401).send({status:"error",error:"Invalid credentials"})
   }
-  //   if(user.email === "adminCoder@coder.com"){
-  //   user.role = "admin"
-  // }else{
-  //   user.role = "user"
-  // }
-
+    if(user.email === "adminCoder@coder.com"){
+    let role = "admin"
+  }else{
+    let role = "user"
+  }
+ 
   const jwtUser={
-    name:`${user.first_name} ${user.last_name}`,
+    first_name:`${user.first_name}`,
+    last_name:`${user.last_name}`,
     email:user.email,
     cart:user.cart,
-   
+   role:user.role
   }
-  console.log(config.jwtSecret)
-  const token=jwt.sign(jwtUser,config.jwtSecret,{expiresIn: "24h"})
+  console.log(jwtUser)
+  const token=jwt.sign(jwtUser,config.JWT_SECRET,{expiresIn: "24h"})
   // if (!req.user)
   // return res.status(401).send({ status: "error", error: "Unauthorized" });
 

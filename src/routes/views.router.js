@@ -1,14 +1,15 @@
 import ProductManager from '../dao/dbManagers/productdbManager.js';
 import CartdbManager from '../dao/dbManagers/cartdbManager.js';
 import { Router } from "express";
+import passport from "passport";
 // import { checkLogged,checkLogin } from '../../middlewares/auth.js';
 
 const router = Router();
 const productmanager = new ProductManager();
 const cartdbManager = new CartdbManager();
-router.get("/products", async (req, res) => {
+router.get("/products", passport.authenticate("jwt", { session: false }), async (req, res) => {
   const { limit = 2, page = 1, category, usable, sort } = req.query;
-
+  console.log(req.user);
   const {
     docs: products,
     hasPrevPage,
@@ -17,15 +18,13 @@ router.get("/products", async (req, res) => {
     prevPage,
   } = await productmanager.getProducts(page, limit, category, usable, sort);
   res.render("products", {
-  
-    user:req.user,
     products,
     page,
     hasPrevPage,
     hasNextPage,
     prevPage,
     nextPage,
-
+    user: req.user,
   });
 })
 
