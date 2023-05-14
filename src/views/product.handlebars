@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Informatic supplies</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" id="home">Home</a>
+        </li>
+      </ul>
+      <div><button id="logout">Log out</button></div>
+    </div>
+  </div>
+</nav>
+<div id="app">
+    <h1 id="productId">Details of the product with the identification
+        {{product._id}}</h1>
+    <div id="productDetail" >
+        <div id="product-{{product._id}}">
+            <div>
+                {{#each product.thumbnails}}
+                <img src="{{this}}" alt="product image" />
+                {{/each}}
+            </div>
+            <div>
+                <h5 id="title">{{product.title}}</h5>
+                <p>Description:
+                    {{product.description}}</p>
+                <p>Category:
+                    {{product.category}}</p>
+                <p>Stock:
+                    {{product.stock}}</p>
+                <p>Product code:
+                    {{product.code}}</p>
+
+                    <div>
+                        <p>${{product.price}}</p>
+                        <button id="botonForm">Add to the cart</button>
+                    </div>
+           
+            </div>
+        </div>
+    </div>
+</div>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js
+"></script>
+<script src="/js/product.js"></script>

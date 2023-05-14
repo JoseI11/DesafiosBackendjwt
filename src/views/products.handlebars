@@ -1,0 +1,85 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Informatic supplies</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="products">Home</a>
+        </li>
+
+
+
+      </ul>
+      <div><button id="createCart">New cart</button></div>
+      <div><button id="logout">Log out</button></div>
+    </div>
+  </div>
+</nav>
+<div id="app">
+
+  <h1 style="display: flex; justify-content: center;">Bienvenido {{user.first_name}} {{user.last_name}} </h1>
+  <h2>{{user.email}}</h2>
+  <h2>{{user.age}}</h2>
+  <h2>{{user.role}}</h2>
+  <h2>{{user.cart}}</h2>
+  <h2 >Products list</h2>
+  <h2>Check our
+    products:</h2>
+
+  <div id="productsList">
+    {{#each products}}
+    <div id="{{this._id}}">
+      <div >
+        {{#each this.thumbnails}}
+        <img src="{{this}}" alt="product image" />
+        {{/each}}
+      </div>
+
+      <div class="px-5 pb-5">
+        <h5>{{this.title}}</h5>
+        <p>{{this.description}}</p>
+
+        <div>
+          <p>${{this.price}}</p>
+          <button onclick='myFunction({{user.cart}}, {{this.id}})'> Add to the cart</button>
+        </div>
+
+        {{!-- <form id="addToCartForm-{{this._id}}">
+
+
+
+        </form> --}}
+        <a href="product/{{this._id}}">
+          <button
+          >Product
+            Details</button>
+        </a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  <div class="flex flex-row justify-center m-4">
+    {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}"><button
+      >Previous</button></a>
+    {{/if}}
+
+    <p
+      class="text-slate-100 bg-gray-500/50 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-6 py-2.5 text-center mx-4">
+      {{page}}</p>
+
+    {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}"><button
+        >Next</button></a>
+    {{/if}}
+  </div>
+
+</div>
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js
+"></script>
+<script src="/js/products.js"></script>
