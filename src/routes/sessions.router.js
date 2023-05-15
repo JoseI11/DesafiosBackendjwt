@@ -28,10 +28,11 @@ router.post("/login",async (req, res) => {
   if(isValidPassword(user,password)){
   return res.status(401).send({status:"error",error:"Invalid credentials"})
   }
+  let role=""
     if(user.email === "adminCoder@coder.com"){
-    let role = "admin"
+    role = "admin"
   }else{
-    let role = "user"
+   role = "user"
   }
  
   const jwtUser={
@@ -39,7 +40,7 @@ router.post("/login",async (req, res) => {
     last_name:`${user.last_name}`,
     email:user.email,
     cart:user.cart,
-   role:user.role
+   role:role
   }
   console.log(jwtUser)
   const token=jwt.sign(jwtUser,config.JWT_SECRET,{expiresIn: "24h"})
@@ -69,8 +70,9 @@ router.post("/login",async (req, res) => {
 router.get("/failLogin",(req,res)=>{
   res.send({status:"error",error:"Authentication error"})
 })
-router.get("/current",(req,res)=>{
- return res.send({payload:req.session.user})
+router.get("/current",passport.authenticate("jwt", { session: false }),(req,res)=>{
+  console.log(req.user)
+  return res.status(200).send({ status: "success", message: req.user });
 })
 router.get("/github",passport.authenticate("githublogin",{scope:["user:email"] }),(req,res)=>{
 
